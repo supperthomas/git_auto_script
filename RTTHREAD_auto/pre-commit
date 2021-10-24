@@ -1,0 +1,40 @@
+#!/bin/sh
+#
+# An example hook script to verify what is about to be committed.
+# Called by "git commit" with no arguments.  The hook should
+# exit with non-zero status after issuing an appropriate message if
+# it wants to stop the commit.
+
+if git rev-parse --verify HEAD >/dev/null 2>&1
+then
+	against=HEAD
+else
+	# Initial commit: diff against an empty tree object
+	against=$(git hash-object -t tree /dev/null)
+fi
+
+changed_files=$(git diff-index --cached $against | \
+	grep -E '[MA]	.*\.(c|cpp|cc|cxx)$' | cut -d'	' -f 2)
+
+if [ -n "$changed_files" ]; then
+	cppcheck --enable=warning,performance,portability --inline-suppr --error-exitcode=1 --force $changed_files
+	err=$?
+	if [ $err -ne 0 ]; then
+	    echo "Hello! we found a obvious fault, please fix the error then commit again"
+		exit $err
+	fi
+fi
+
+# We only filter the file name with c or cpp file.
+changed_files=$(git diff-index --cached $against | \
+	grep -E '[MA]	.*\.(c|cpp|h)$' | cut -d'	' -f 2)
+
+if [ -n "$changed_files" ]; then
+	astyle --style=allman --indent=spaces=4 --indent=spaces=4 --indent=spaces=4 --pad-header --pad-header --pad-header --align-pointer=name --lineend=linux --convert-tabs --verbose $changed_files
+	formatting $changed_files
+	git add $changed_files
+fi
+
+exit 0
+
+
