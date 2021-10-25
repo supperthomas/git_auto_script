@@ -68,3 +68,4 @@ pyinstaller --onefile --nowindowed formatting.py
 
 这个时候，只要你正常commit，你就会发现，你的代码格式已经经过astyle优化过了，如果代码静态检查有问题，会commit不过，并且提示你需要修改，同时也是经过formatting的修改了。之后再也不用担心PR会有格式上的问题了。
 
+![help](images/help.gif)
