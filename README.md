@@ -48,11 +48,11 @@ STEP3:命令行里面执行astyle命令，可以用即可
 
 STEP1: 直接clone[git_auto_script](https://github.com/supperthomas/git_auto_script.git)目录
 
-STEP2: 将Windows_exe 添加到path环境变量中
+STEP2: 将Windows_exe 文件夹添加到path环境变量中
 
 STEP3: 命令行里面执行formatting 可以用即可
 
-生成exe采用命令
+生成exe采用命令(这一步通常不需要操作，如果需要更新的话执行下面操作)
 
 ```
 pyinstaller --onefile --nowindowed formatting.py
