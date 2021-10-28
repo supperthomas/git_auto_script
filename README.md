@@ -69,3 +69,59 @@ pyinstaller --onefile --nowindowed formatting.py
 这个时候，只要你正常commit，你就会发现，你的代码格式已经经过astyle优化过了，如果代码静态检查有问题，会commit不过，并且提示你需要修改，同时也是经过formatting的修改了。之后再也不用担心PR会有格式上的问题了。
 
 ![help](images/help.gif)
+
+
+
+## FAQ
+
+### cppcheck和astyle等命令在哪里可以去掉？
+
+在pre-commit文件夹中，找到cppcheck命令和astyle命令和formatting命令，前面加`#`就可以去掉
+
+如下所示：注释掉所有的命令，就不会执行自动化脚本了
+
+```
+if [ -n "$changed_files" ]; then
+	#cppcheck --enable=warning,performance,portability --inline-suppr --error-exitcode=1 --force $changed_files
+	err=$?
+	if [ $err -ne 0 ]; then
+	    echo "Hello! we found a obvious fault, please fix the error then commit again"
+		exit $err
+	fi
+fi
+
+# We only filter the file name with c or cpp file.
+changed_files=$(git diff-index --cached $against | \
+	grep -E '[MA]	.*\.(c|cpp|h)$' | cut -d'	' -f 2)
+
+if [ -n "$changed_files" ]; then
+	#astyle --style=allman --indent=spaces=4 --indent=spaces=4 --indent=spaces=4 --pad-header --pad-header --pad-header --align-pointer=name --lineend=linux --convert-tabs --verbose  $changed_files
+	#formatting $changed_files
+	git add $changed_files
+fi
+```
+
+  ### commit 之后文件夹下面多出来一些奇怪的文件是否可以去掉
+
+生成一些*.orig文件是由于astyle对文件进行了修改，为了防止改错文件，将源文件做了备份，如果不想要的话可以在astyle命令下面添加下面的选项来去掉：
+
+```
+ --suffix=none
+```
+
+### cppcheck 的选项的含义
+
+cppcheck选项可以参考官方[manual](http://cppcheck.net/manual.pdf)
+
+astyle 选项参考官方的[astyle option](http://astyle.sourceforge.net/astyle.html)
+
+本项目主要目的是提供一种自动化的commit机制，如果觉得cppcheck机制和astyle机制不好用，可以注释掉或者用其他的命令替换掉，也欢迎提供一些比较好用的免费的方便的软件。
+
+astyle的选项，参考RTTHREAD官方文档
+
+### pre-commit是否可以在主仓库中保留
+
+目前我觉得是无法在仓库中保留的，欢迎大家提出好的idea。我也希望能有好的方法在主仓库保留
+
+
+
