@@ -15,7 +15,7 @@ changed_files=$(git diff-index --cached $against | \
 	grep -E '[MA]	.*\.(c|cpp|cc|cxx)$' | cut -d'	' -f 2)
 
 if [ -n "$changed_files" ]; then
-	cppcheck --enable=warning,performance,portability --inline-suppr --error-exitcode=1 --force $changed_files
+	#cppcheck --enable=warning,performance,portability --inline-suppr --error-exitcode=1 --force $changed_files
 	err=$?
 	if [ $err -ne 0 ]; then
 	    echo "Hello! we found a obvious fault, please fix the error then commit again"
@@ -28,7 +28,7 @@ changed_files=$(git diff-index --cached $against | \
 	grep -E '[MA]	.*\.(c|cpp|h)$' | cut -d'	' -f 2)
 
 if [ -n "$changed_files" ]; then
-	astyle --style=allman --indent=spaces=4 --indent=spaces=4 --indent=spaces=4 --pad-header --pad-header --pad-header --align-pointer=name --lineend=linux --convert-tabs --verbose  $changed_files
+	#astyle --style=allman --indent=spaces=4 --indent=spaces=4 --indent=spaces=4 --pad-header --pad-header --pad-header --align-pointer=name --lineend=linux --convert-tabs --verbose  $changed_files
 	formatting $changed_files
 	git add $changed_files
 fi

@@ -6,7 +6,7 @@
 
 - 你是否总是忘记整理那些astyle的格式问题，总是提交的代码不够美观？
 
-- 你是否总是有些bug是因为没有经过，导致后面bug一大堆？
+- 你是否总是有些bug是因为没有经过静态检查，导致后面bug一大堆？
 
 来看下这个软件吧，保证对你有一定帮助，而且在做其他项目的时候这个软件包也可以使用。
 
@@ -24,21 +24,7 @@
 
 第一次使用可能会麻烦一点，不过我觉得这个就是一劳永逸的事情，后面就几乎无感了。
 
-### CPPCHECK
 
- STEP1: [CPPCHECK官网](http://cppcheck.net/) 下载安装
-
-STEP2: 环境变量path添加cppcheck路径
-
-STEP3:命令行里面执行cppcheck命令，可以用即可
-
-### ASTYLE
-
-STEP1: [ASTYEL官网](https://sourceforge.net/projects/astyle/) 下载解压
-
-STEP2: 环境变量path添加astyle路径
-
-STEP3:命令行里面执行astyle命令，可以用即可
 
 ### formatting
 
@@ -74,11 +60,29 @@ pyinstaller --onefile --nowindowed formatting.py
 
 ## FAQ
 
-### cppcheck和astyle等命令在哪里可以去掉？
+### 如何添加cppcheck和astyle
 
-在pre-commit文件夹中，找到cppcheck命令和astyle命令和formatting命令，前面加`#`就可以去掉
+#### CPPCHECK
 
-如下所示：注释掉所有的命令，就不会执行自动化脚本了
+ STEP1: [CPPCHECK官网](http://cppcheck.net/) 下载安装
+
+STEP2: 环境变量path添加cppcheck路径
+
+STEP3:命令行里面执行cppcheck命令，可以用即可
+
+#### ASTYLE
+
+STEP1: [ASTYEL官网](https://sourceforge.net/projects/astyle/) 下载解压
+
+STEP2: 环境变量path添加astyle路径
+
+STEP3:命令行里面执行astyle命令，可以用即可
+
+### cppcheck和astyle等命令在哪里可以添加？
+
+在pre-commit文件夹中，找到cppcheck命令和astyle命令和formatting命令，前面`#` 去掉就可以
+
+如下所示：
 
 ```
 if [ -n "$changed_files" ]; then
@@ -101,7 +105,7 @@ if [ -n "$changed_files" ]; then
 fi
 ```
 
-  ### commit 之后文件夹下面多出来一些奇怪的文件是否可以去掉
+### commit 之后文件夹下面多出来一些奇怪的文件是否可以去掉
 
 生成一些*.orig文件是由于astyle对文件进行了修改，为了防止改错文件，将源文件做了备份，如果不想要的话可以在astyle命令下面添加下面的选项来去掉：
 
